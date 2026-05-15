@@ -63,22 +63,6 @@ class BasicConv2d(nn.Module):
             x = self.dropout(x)
         return x
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-import torch
-import torch.nn as nn
-import torch_dct as dct
-
-
-import torch
-import torch.nn as nn
-import torch_dct as dct
 class TokenMixer(nn.Module):
     def __init__(self, input_seq=[], batch_size=[], channel=[], pred_seq=[], dropout=[], factor=[], d_model=[]):
         super(TokenMixer, self).__init__()
@@ -277,26 +261,3 @@ class Model(nn.Module):
             return dec_out  # [B, N]
         return None
 
-    def do_patching_m(self, x, patch_len=None, patch_stride=None):
-        """
-        x: [B, N, T]
-        return: [B, N, patch_num, patch_len]
-        """
-
-        # 如果不传，用默认值（兼容原来代码）
-        if patch_len is None:
-            patch_len = self.patch_len
-        if patch_stride is None:
-            patch_stride = self.patch_stride
-
-        # padding（保持最后一个patch完整）
-        x_end = x[:, :, -1:]
-        pad_len = patch_stride
-        x_padding = x_end.repeat(1, 1, pad_len)
-
-        x_new = torch.cat((x, x_padding), dim=-1)
-
-        # unfold切patch
-        x_patch = x_new.unfold(dimension=-1, size=patch_len, step=patch_stride)
-
-        return x_patch
